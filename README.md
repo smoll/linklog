@@ -1,4 +1,4 @@
-# LinkLog
+# LinkLog [ ![Codeship Status for smoll/linklog](https://codeship.com/projects/6b657fd0-f015-0132-11e0-3ee07e19cdb4/status?branch=master)](https://codeship.com/projects/84492)
 
 ## Usage
 
