@@ -13,7 +13,7 @@
             expect   = chai.expect;
         chai.use(require('chai-string'));
 
-        this.Given(/^I am a new user$/, function(callback) {
+        this.Given(/^I (?:am a new user|log back in)$/, function(callback) {
             // using solution from https://github.com/xolvio/meteor-cucumber/issues/86
             this.client
                 .url(url.resolve(process.env.ROOT_URL, '/'))
@@ -23,7 +23,7 @@
                 .call(callback);
         });
 
-        this.Given(/^I am unauthenticated$/, function(callback) {
+        this.Given(/^I (?:am unauthenticated|log out)$/, function(callback) {
             // https://gentlenode.com/journal/meteor-5-complete-cheatsheet/7
             this.client
                 .url(url.resolve(process.env.ROOT_URL, '/'))
