@@ -8,31 +8,46 @@
     module.exports = function() {
 
         // You can use normal require here, cucumber is NOT run in a Meteor context (by design)
-        var url = require('url');
+        var chai     = require('chai'),
+            url      = require('url'),
+            expect   = chai.expect;
+        chai.use(require('chai-string'));
 
         this.Given(/^I am a new user$/, function(callback) {
-            this.client.call(callback); // TODO: replace with the below, after login is implemented
-            // // using solution from https://github.com/xolvio/meteor-cucumber/issues/86
-            // this.client
-            //     .url(url.resolve(process.env.ROOT_URL, '/'))
-            //     .executeAsync(function(done) {
-            //         Meteor.loginWithPassword('cucumber', 'cucumber123', done);
-            //     })
-            //     .call(callback);
+            // using solution from https://github.com/xolvio/meteor-cucumber/issues/86
+            this.client
+                .url(url.resolve(process.env.ROOT_URL, '/'))
+                .executeAsync(function(done) {
+                    Meteor.loginWithPassword('cucumber@cucumber.com', 'cucumber123', done);
+                })
+                .call(callback);
         });
 
-        this.When(/^I navigate to "([^"]*)"$/, function(relativePath, callback) {
-            // WebdriverIO supports Promises/A+ out the box, so you can return that too
-            this.client. // this.browser is a pre-configured WebdriverIO + PhantomJS instance
-            url(url.resolve(process.env.ROOT_URL, relativePath)). // process.env.ROOT_URL always points to the mirror
-            call(callback);
+        this.Given(/^I am unauthenticated$/, function(callback) {
+            // https://gentlenode.com/journal/meteor-5-complete-cheatsheet/7
+            this.client
+                .url(url.resolve(process.env.ROOT_URL, '/'))
+                .executeAsync(function(done) {
+                    Meteor.logout(done);
+                })
+                .call(callback);
         });
 
-        this.Then(/^I should see the title "([^"]*)"$/, function(expectedTitle, callback) {
-            // you can use chai-as-promised in step definitions also
-            this.client.
-            waitForVisible('body *'). // WebdriverIO chain-able promise magic
-            getTitle().should.become(expectedTitle).and.notify(callback);
+        this.Then(/^I should see a login interface$/, function (callback) {
+            // https://github.com/xolvio/meteor-cucumber/issues/104#issuecomment-103709537
+            this.client
+                .waitForVisible('body')
+                .isExisting('#login-sign-in-link')
+                .should.eventually.be.true.and.notify(callback);
+        });
+
+        this.Then(/^I should be logged in$/, function (callback) {
+            this.client
+                .waitForVisible('#login-name-link')
+                .getText('#login-name-link', function (err, text) {
+                    expect(text).to.startWith('cucumber@cucumber.com');
+                })
+                .call(callback);
         });
 
     };

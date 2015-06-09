@@ -5,7 +5,14 @@ Feature: Authentication
   So that I can save my personal links and settings
 
   @dev
-  Scenario: Placeholder
-    Given I am a new user
+  Scenario: Not logged in
+    Given I am unauthenticated
     When I navigate to "/"
     Then I should see the title "LinkLog"
+    And I should see a login interface
+
+  @dev
+  Scenario: Logged in
+    Given I am a new user
+    Then I should see the title "LinkLog"
+    And I should be logged in
