@@ -12,7 +12,7 @@
 <template name="linklog">
   {{#if currentUser}}
     <p>Links go here:</p>
-    <ul>
+    <ul id="list-of-links">
       {{#each link}}
         <li class="added-link"><a href="{{url}}">{{url}}</a> | <a href="#" class="remove">Remove</a></li>
       {{/each}}

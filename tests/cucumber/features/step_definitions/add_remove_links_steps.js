@@ -7,24 +7,33 @@
 
     module.exports = function() {
 
+        var chai     = require('chai'),
+            expect   = chai.expect,
+            fakeLink = 'http://www.fake' + Math.floor(Date.now() / 1000) + '.com';
+
         this.Then(/^I should not be able to add a link$/, function(callback) {
-            // Write code here that turns the phrase above into concrete actions
-            callback.pending();
+            // Fails due to: expected { state: 'pending' } to be false
+            // seems related https://github.com/domenic/chai-as-promised/issues/86
+            this.client
+                .waitForVisible('body *')
+                .isExisting('#new-link-url')
+                .should.be.false.and.notify(callback);
         });
 
         this.When(/^I add a new link$/, function(callback) {
-            // Write code here that turns the phrase above into concrete actions
-            callback.pending();
+            this.client
+                .setValue('#new-link-url', fakeLink)
+                .submitForm('#add-link-form')
+                .call(callback);
         });
 
-        this.Then(/^the link should be visible$/, function(callback) {
-            // Write code here that turns the phrase above into concrete actions
-            callback.pending();
-        });
-
-        this.Then(/^the link should still be visible$/, function(callback) {
-            // Write code here that turns the phrase above into concrete actions
-            callback.pending();
+        this.Then(/^the link should (?:be|still be) visible$/, function(callback) {
+            this.client
+                .waitForVisible('#list-of-links')
+                .getText('.added-link:first-child', function(err, text){
+                    expect(text).to.contain(fakeLink)
+                })
+                .call(callback);
         });
 
     };
