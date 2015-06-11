@@ -4,4 +4,27 @@
 <body>
   <h1>LinkLog</h1>
   {{> loginButtons}}
+  <br><br>
+  {{> addLinkForm}}
+  {{> linklog}}
 </body>
+
+<template name="linklog">
+  {{#if currentUser}}
+    <p>Links go here:</p>
+    <ul id="list-of-links">
+      {{#each link}}
+        <li class="added-link"><a href="{{url}}">{{url}}</a> | <a href="#" class="remove">Remove</a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</template>
+
+<template name="addLinkForm">
+  {{#if currentUser}}
+    <form id="add-link-form">
+      <input type="text" name="url" id="new-link-url">
+      <input type="submit" value="Add Link">
+    </form>
+  {{/if}}
+</template>
