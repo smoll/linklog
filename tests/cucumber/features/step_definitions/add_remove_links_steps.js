@@ -12,12 +12,13 @@
             fakeLink = 'http://www.fake' + Math.floor(Date.now() / 1000) + '.com';
 
         this.Then(/^I should not be able to add a link$/, function(callback) {
-            // Fails due to: expected { state: 'pending' } to be false
-            // seems related https://github.com/domenic/chai-as-promised/issues/86
             this.client
                 .waitForVisible('body *')
-                .isExisting('#new-link-url')
-                .should.be.false.and.notify(callback);
+                .isExisting('#new-link-url').should.become(false).and.notify(callback);
+                // can't do: `.isExisting('#thing').should.be.false.and.notify(callback);`
+                // or else we get: expected { state: 'pending' } to be false
+                // because of how promises work...?
+                // seems related to https://github.com/domenic/chai-as-promised/issues/86
         });
 
         this.When(/^I add a new link$/, function(callback) {

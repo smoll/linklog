@@ -4,8 +4,7 @@ Feature: Add & remove links
   I want to be able to add and remove links
   So that I can manage my personal linklog
 
-# Fix this by adding a background step which resolves the URL
-  @ignore
+  @dev
   Scenario: Unauthenticated user cannot add a link
     Given I am unauthenticated
     When I navigate to "/"
