@@ -12,3 +12,6 @@ accounts-password
 accounts-ui
 meteorhacks:npm
 http
+
+
+npm-container
