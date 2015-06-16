@@ -10,3 +10,5 @@ insecure
 xolvio:cucumber
 accounts-password
 accounts-ui
+meteorhacks:npm
+http
